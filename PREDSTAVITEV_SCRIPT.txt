@@ -1,0 +1,602 @@
+================================================================================
+           SPOTIFY ANALIZA - SCRIPT ZA PREZENTACIJO
+================================================================================
+
+📌 OSNOVNE INFORMACIJE
+   Avtor: [Ime Priimek]
+   Datum: Januar 2026
+   Trajanje: ~10-15 minut
+   Ciljna publika: Akademska evaluacija
+
+================================================================================
+                    STRUKTURA PREZENTACIJE
+================================================================================
+
+1. UVOD (2 min)
+2. RAZISKOVALNA VPRAŠANJA (1 min)
+3. PODATKI IN METODOLOGIJA (2 min)
+4. REZULTATI - 4 KLJUČNE ANALIZE (8 min)
+   4.1 Barrier-to-Entry Analiza
+   4.2 Retention Analiza
+   4.3 Concentration Analiza
+   4.4 Survival Analiza
+5. NAPREDNE ANALIZE (2 min)
+6. ZAKLJUČKI IN ODGOVORI (2 min)
+
+================================================================================
+                    1. UVOD (SLIDE 1-2)
+================================================================================
+
+🎤 "Dober dan. Predstavil bom analizo dinamike uspeha na platformi Spotify."
+
+📊 KONTEKST
+-----------
+• Spotify: 600+ milijonov uporabnikov
+• Dominantna platforma za distribucijo glasbe
+• Kompleksni algoritmi za priporočanje vsebine
+• Vprašanje: ali platforma omogoča vstop novim izvajalcem ali utrjuje že uspešne?
+
+🎯 KLJUČNO RAZISKOVALNO VPRAŠANJE
+----------------------------------
+"Ali platforma Spotify skozi čas omogoča vstop novih izvajalcev v vrh 
+popularnosti ali predvsem utrjuje že obstoječe uspešne izvajalce?"
+
+📈 RELEVANTNOST
+---------------
+• Za izvajalce: Strategije za preboj
+• Za založbe: Odločitve o investicijah
+• Za regulatorje: Vprašanja tržne koncentracije
+• Za platformo: Transparentnost algoritmov
+
+================================================================================
+                2. RAZISKOVALNA VPRAŠANJA (SLIDE 3)
+================================================================================
+
+🎤 "Glavno vprašanje sem razdelil na štiri podvprašanja, vsako z lastno 
+    hipotezo."
+
+📌 4 PODVPRAŠANJA
+-----------------
+
+H1: BARRIER-TO-ENTRY (Ovire za vstop)
+   RV: Ali se ovire za dosego visoke popularnosti skozi čas povečujejo?
+   Hipoteza: Razmerje P90/mediana se povečuje → večje ovire
+   
+H2: RETENTION (Vztrajnost uspeha)
+   RV: Kako verjetno je, da uspešen izvajalec ostane uspešen?
+   Hipoteza: Uspešni imajo višjo verjetnost ohranitve (P > 0.5)
+   
+H3: CONCENTRATION (Koncentracija uspeha)
+   RV: Ali se uspeh koncentrira pri manjšem številu izvajalcev?
+   Hipoteza: Gini koeficient se skozi čas povečuje
+   
+H4: SURVIVAL (Preživetje)
+   RV: Koliko časa povprečen izvajalec ostane relevanten?
+   Hipoteza: Novejše kohorte imajo krajši mediani čas relevantnosti
+
+================================================================================
+                3. PODATKI IN METODOLOGIJA (SLIDE 4)
+================================================================================
+
+🎤 "Za analizo sem uporabil obsežen dataset s platforme Kaggle."
+
+📊 PODATKOVNI VIRI
+------------------
+✓ tracks.csv: 586,671 skladb
+✓ artists.csv: 70,986 izvajalcev  
+✓ Časovno obdobje: 1922 - 2021
+✓ Ključna spremenljivka: POPULARITY score (0-100)
+
+🔧 METODOLOGIJA
+---------------
+• Čiščenje in standardizacija imen izvajalcev
+• Združevanje datasetov
+• Časovna analiza po letih izdaje
+• 4 ločeni problemski sklopi z različnimi statističnimi metodami
+
+⚠️ KLJUČNE OMEJITVE
+--------------------
+• Popularity je TRENUTNA metrika (snapshot, ne zgodovinski trend)
+• Survivorship bias (dataset vsebuje le skladbe, ki so še na platformi)
+• Selekcijska pristranskost (Kaggle dataset ni naključni vzorec)
+• Popularity algoritem ni javno dokumentiran
+
+================================================================================
+        4.1 REZULTATI: BARRIER-TO-ENTRY ANALIZA (SLIDE 5-6)
+================================================================================
+
+🎤 "Prva analiza preverja, ali se vstopne ovire povečujejo."
+
+📊 GRAF: viz_07_barrier_to_entry.png
+   Prikaži: P90/P50 ratio skozi čas (1980-2020)
+
+🔍 METRIKE
+----------
+• P90/P50 Ratio: Razmerje med 90. percentilom in mediano popularnosti
+• Višje razmerje = večja vrzel med vrhom in povprečjem = višje ovire
+• Mann-Kendall trend test: Testira statistično značilnost trenda
+
+📈 REZULTATI
+------------
+✗ P90/P50 ratio PADA (ne narašča!)
+   - 1980: 1.71
+   - 2000: 1.55
+   - 2020: 1.37
+
+✓ Kendall's tau = -0.722, p < 0.001 (statistično značilen padajoč trend)
+
+🎤 "INTERPRETACIJA: Vrzel med vrhom in povprečjem se ZMANJŠUJE, kar pomeni, da 
+    se vstopne ovire dejansko ZNIŽUJEJO, ne povečujejo."
+
+⚠️ DODATNA METRIKA: Entry Success Rate
+----------------------------------------
+• Delež novih izvajalcev, ki dosežejo top 10% v prvem letu
+• Rezultat: 8.83% (pod pričakovanimi 10%)
+• t-test: t = -6.85, p < 0.001
+• Novi izvajalci dosegajo uspeh REDKEJE od naključnega pričakovanja
+
+🎯 ZAKLJUČEK H1
+---------------
+❌ HIPOTEZA H1: ZAVRNJENA
+   • Ovire se NE povečujejo (P90/P50 pada)
+   • VENDAR: Novi izvajalci vseeno težje dosegajo vrh (Entry Success < 10%)
+   • To nakazuje kompleksnejšo sliko – nižje ovire, a vseeno težje za nove
+
+================================================================================
+        4.2 REZULTATI: RETENTION ANALIZA (SLIDE 7-8)
+================================================================================
+
+🎤 "Druga analiza preverja, ali uspešni izvajalci ohranjajo prednost."
+
+📊 GRAF: viz_10_retention_analysis.png + viz_11_experience_vs_success.png
+   Prikaži: Prehodne matrike in uspešnost glede na izkušnje
+
+🔍 METRIKE
+----------
+• Transition Matrix: Verjetnosti prehodov med stanji
+  - S → S (Uspešen ostane uspešen)
+  - F → S (Neuspešen postane uspešen)
+  - S → F (Uspešen postane neuspešen)
+  - F → F (Neuspešen ostane neuspešen)
+
+• Definicija "uspešen": Top 25% popularnosti v danem letu
+
+📈 REZULTATI - PREHODNE MATRIKE
+--------------------------------
+Period 1990-2000:
+   • P(S → S) = 27.7%  ← Uspešni ostanejo uspešni
+   • P(F → S) = 6.5%   ← Neuspešni postanejo uspešni
+   • Ratio: 27.7% / 6.5% = 4.3x prednost!
+
+🎤 "INTERPRETACIJA: Če si uspešen v letu t, imaš 4.3-krat večjo verjetnost, 
+    da boš uspešen tudi v letu t+1, v primerjavi z neuspešnim izvajalcem."
+
+📊 GRAF: Experience vs Success (izkušnje po letih)
+--------------------------------------------------
+• 0-1 leta izkušenj: ~8% uspešnost
+• 5+ let izkušenj: ~18% uspešnost
+• Jasen trend: Več izkušenj = večja verjetnost uspeha
+• ANOVA: F = 156.3, p < 0.001 (statistično značilno)
+
+🎯 ZAKLJUČEK H2
+---------------
+⚠️ HIPOTEZA H2: DELNO POTRJENA
+   • Uspešni imajo 4.3x prednost pri ohranjanju uspeha
+   • VENDAR: Absolutna retencija je nizka (27.7%)
+   • To pomeni: Prednost obstaja, a industrija je zelo nestabilna
+   • Tudi uspešni pogosto "izpadejo" iz vrhunske skupine
+
+================================================================================
+        4.3 REZULTATI: CONCENTRATION ANALIZA (SLIDE 9-10)
+================================================================================
+
+🎤 "Tretja analiza preverja, ali se uspeh koncentrira pri manjšem številu 
+    izvajalcev."
+
+📊 GRAF: viz_12_concentration_lorenz.png
+   Prikaži: Lorenz krivulje in Gini koeficienti po desetletjih
+
+🔍 METRIKE
+----------
+• Gini koeficient: Mera neenakosti (0 = popolna enakost, 1 = popolna neenakost)
+• HHI (Herfindahl-Hirschman Index): Mera tržne koncentracije
+• Top X% Share: Delež skupne popularnosti, ki ga zajame top 1%, 5%, 10%
+
+📈 REZULTATI - GINI KOEFICIENT PO DESETLETJIH
+----------------------------------------------
+• 1980s: 0.287
+• 1990s: 0.256
+• 2000s: 0.216  ← Najnižja koncentracija!
+• 2010s: 0.277
+
+Mann-Kendall trend test:
+   • Kendall's tau = -0.205
+   • p = 0.059 (NI statistično značilno pri α = 0.05)
+
+🎤 "INTERPRETACIJA: Gini koeficient PADA v obdobju 1980-2000, nato rahlo 
+    naraste v 2010s, vendar brez statističnega trenda."
+
+📊 HHI INDEKS
+-------------
+• 1990: HHI = 14.7
+• 2010: HHI = 4.9
+• Padec za 67%!
+• HHI < 1500 se šteje za "nizko koncentracijo" → trg je zelo razpršen
+
+📊 TOP SHARES
+-------------
+• Top 1% izvajalcev: ~8% skupne popularnosti
+• Top 5% izvajalcev: ~28% skupne popularnosti
+• Top 10% izvajalcev: ~45% skupne popularnosti
+
+🎯 ZAKLJUČEK H3
+---------------
+⚖️ HIPOTEZA H3: ZAVRNJENA / NEPOTRJENA
+   • Koncentracija se NE povečuje
+   • Gini koeficient je stabilen, brez trenda
+   • HHI PADA → trg postaja bolj razpršen
+   • To nasprotuje "winner-take-all" teoriji!
+
+================================================================================
+        4.4 REZULTATI: SURVIVAL ANALIZA (SLIDE 11-12)
+================================================================================
+
+🎤 "Četrta analiza uporablja Kaplan-Meier metodo za analizo preživetja 
+    izvajalcev."
+
+📊 GRAF: survival_km_overall.png + survival_km_cohorts.png
+   Prikaži: Survival krivulje celotne populacije in po kohortah
+
+🔍 METRIKA
+----------
+• Kaplan-Meier Estimator: Metoda za analizo časa do dogodka
+• Dogodek: Izvajalec "izpade" iz top 25% popularnosti
+• Cenzura: Izvajalec je še vedno v top 25% (ali obdobje analize se konča)
+• Mediana preživetja: Čas, ko 50% izvajalcev izpade
+
+📈 REZULTATI - CELOTNA POPULACIJA
+----------------------------------
+✓ Mediana preživetja: 1.0 leto
+   → 50% izvajalcev izpade iz elitne skupine že po 1 letu!
+
+✓ Verjetnosti preživetja:
+   • Po 1 letu:  ~15.8% (84% je že izpadlo!)
+   • Po 5 letih: ~1.9%
+   • Po 10 letih: ~0.8%
+
+🎤 "INTERPRETACIJA: Ekstremno visoka 'umrljivost' izvajalcev! 84% izvajalcev 
+    ne obdrži elitne pozicije niti za 1 leto."
+
+📊 PRIMERJAVA PO KOHORTAH (DESETLETJIH DEBUTA)
+------------------------------------------------
+Mediana preživetja:
+   • 1980s: 1.2 leta
+   • 1990s: 1.0 leto
+   • 2000s: 0.9 leta
+   • 2010s: 1.1 leta
+
+Log-rank test: p < 0.0001 (statistično značilne razlike med kohortami)
+
+🎤 "Kohorte se rahlo razlikujejo, vendar so razlike majhne – mediana je 
+    vedno okoli 1 leto."
+
+⚠️ POMEMBNA OPOZORILA
+----------------------
+1. Survivorship bias: Dataset vsebuje le skladbe, ki so DANES še na platformi
+2. Popularity je TRENUTNA metrika (ne zgodovinska)
+3. Pravi pomen: "Koliko let zaporednih ima izvajalec vsaj eno skladbo, ki je 
+   DANES še vedno popularna"
+4. To NI mera "koliko časa je bil izvajalec uspešen v industriji"
+
+🎯 ZAKLJUČEK H4
+---------------
+✅ HIPOTEZA H4: DELNO POTRJENA
+   • Mediana preživetja je ekstremno nizka (1 leto)
+   • Razlike med kohortami obstajajo, a so majhne
+   • Novejše kohorte imajo rahlo krajše preživetje
+   • Vendar je interpretacija omejena zaradi survivorship bias
+
+================================================================================
+            5. NAPREDNE ANALIZE (SLIDE 13-14)
+================================================================================
+
+🎤 "Poleg osnovnih analiz sem izvedel še več naprednih metod."
+
+📊 5.1 PCA + K-MEANS CLUSTERING
+--------------------------------
+Graf: pca_artist_clustering.png
+
+• Cilj: Identificirati profile izvajalcev
+• Metoda: PCA (dimenzijsko zmanjšanje) + K-Means (5 clustrov)
+• Značilnosti: povprečna popularnost, max popularnost, št. skladb, trajanje kariere
+
+🎯 5 IDENTIFICIRANIH PROFILOV:
+   ⭐ Zvezde: Visoka povprečna in maksimalna popularnost, dolga kariera
+   📈 Hitri vzpon: Hiter dvig, kratko obdobje, visok peak
+   🎸 Nišni producenti: Majhna popularnost, veliko skladb, dolga kariera
+   💿 One-hit wonders: En velik hit, nato izginotje
+   🆕 Novi/emerging: Majhna zgodovina, nizka popularnost, potencial
+
+📊 5.2 RADAR CHARTS
+-------------------
+Graf: artist_profiles_radar.png
+
+• Večdimenzionalen prikaz lastnosti izvajalcev
+• Dimenzije: avg popularnost, max popularnost, št. skladb, trajanje, explicit ratio
+
+📊 5.3 INTERAKTIVNI DASHBOARDI (Plotly)
+----------------------------------------
+Graf: interactive_dashboard.html
+
+• Dropdown meniji za izbiro metrik
+• 3D scatter plots z rotacijo
+• Heatmaps z interaktivnimi filtri
+• Omogoča raziskovanje podatkov v realnem času
+
+📊 5.4 LOGISTIC REGRESSION MODEL
+---------------------------------
+Graf: model_roc_curve.png + model_feature_importance.png
+
+• Cilj: Napovedati verjetnost uspeha izvajalca
+• Features: avg popularity, max popularity, track count, tenure, explicit ratio
+• Rezultati:
+   ✓ Accuracy: ~85%
+   ✓ ROC AUC: 0.920 (odličen!)
+
+• Feature Importance:
+   1. artist_max_pop (največji vpliv)
+   2. artist_avg_pop
+   3. is_veteran
+   4. artist_track_count
+
+📊 5.5 WHAT-IF SIMULACIJE
+--------------------------
+Graf: whatif_scenarios.png
+
+• Testiranje 3 scenarijev:
+   1. Nov izvajalec (P10 karakteristike): 35% verjetnost uspeha
+   2. Povprečen izvajalec (P50): 48% verjetnost uspeha
+   3. Top izvajalec (P90): 75% verjetnost uspeha
+
+• Insight: Zgodovina izvajalca ima močan vpliv na prihodnji uspeh
+
+📊 5.6 SENSITIVITY ANALIZA
+---------------------------
+Graf: sensitivity_analysis.png
+
+• Testiranje robustnosti rezultatov pri različnih pragovih
+• Preizkušeni pragovi: top 10%, top 25%, top 50%
+• Rezultat: Ugotovitve so stabilne pri različnih definicijah "uspeha"
+
+📊 5.7 SANKEY DIAGRAM
+----------------------
+Graf: sankey_artist_transitions.html
+
+• Vizualizacija prehodov med kategorijami izvajalcev
+• Obdobja: 2000-2010 → 2010-2020
+• Kategorije: Zvezda, Uspešen, Srednji, Nizek
+• Prikazuje fluktacijo in mobilnost v industriji
+
+================================================================================
+                6. ZAKLJUČKI IN ODGOVORI (SLIDE 15-16)
+================================================================================
+
+🎤 "Zdaj povzemam ključne ugotovitve in odgovarjam na raziskovalna vprašanja."
+
+📊 POVZETEK REZULTATOV HIPOTEZ
+-------------------------------
+
+| HIPOTEZA | METRIKA | REZULTAT | STATUS |
+|----------|---------|----------|--------|
+| H1: Barrier-to-entry narašča | P90/P50 ratio | τ = -0.722, p < 0.001 | ❌ ZAVRNJENA |
+| H1b: Novi < uspešnost pričakovane | Entry Success Rate | 8.83% vs 10%, t = -6.85, p < 0.001 | ✅ POTRJENA |
+| H2: Uspešni obdržijo uspeh | P(S→S) / P(F→S) | 27.7% vs 6.5% (4.3x) | ⚠️ DELNO POTRJENA |
+| H3: Koncentracija narašča | Gini trend | τ = -0.205, p = 0.059 | ⚖️ NEPOTRJENA |
+| H4: Novejše kohorte krajše preživetje | Mediana survival | ~1 leto (vse kohorte) | ⚠️ DELNO POTRJENA |
+
+🎯 ODGOVOR NA GLAVNO RAZISKOVALNO VPRAŠANJE
+--------------------------------------------
+
+"Ali Spotify omogoča vstop novih izvajalcev ali utrjuje že uspešne?"
+
+✅ MEŠANA SLIKA:
+
+1. ✅ OMOGOČA VSTOP:
+   • Vstopne ovire se ZNIŽUJEJO (P90/P50 pada)
+   • Koncentracija NE narašča (Gini stabilen, HHI pada)
+   • Trg postaja bolj razpršen, ne bolj koncentriran
+   • Več izvajalcev ima dostop do platforme
+
+2. ⚠️ A OHRANJA PREDNOST USPEŠNIH:
+   • Uspešni imajo 4.3x večjo verjetnost ohranitve uspeha
+   • Novi izvajalci dosegajo top 10% redkeje od naključnega (8.83% < 10%)
+   • Izkušnje pomembno vplivajo na uspeh (ANOVA p < 0.001)
+   • Model kaže, da zgodovina močno napoveduje prihodnji uspeh (ROC AUC 0.92)
+
+3. 🔄 VISOKA FLUKTUACIJA:
+   • Mediana preživetja je le 1 leto (84% izpade v 1. letu!)
+   • Celo uspešni imajo nizko absolutno retencijo (27.7%)
+   • Industrija je ZELO dinamična in nestabilna
+
+🎤 "ZAKLJUČEK: Spotify NI čisto demokratizator (novi imajo težave), NI pa tudi 
+    winner-take-all sistem (koncentracija pada). Resničnost je med obema 
+    ekstremoma – platforma omogoča vstop, a uspešni ohranjajo relativno 
+    prednost."
+
+🔑 KLJUČNI INSIGHTS
+-------------------
+
+1. 📉 PARADOKS NIŽJIH OVIR, A TEŽJEGA USPEHA:
+   • Tehnični prag za objavo je nizek (vsak lahko objavi)
+   • A doseganje VISOKEGA uspeha je težje (zatrpanost trga)
+   • Entry success rate pod naključnim pričakovanjem
+
+2. 🔄 VISOKA FLUKTUACIJA NASPROTUJE LOCK-IN TEORIJI:
+   • Winner-take-all bi pomenil visoko retencijo (npr. 80%+)
+   • Dejanska retencija: 27.7% (nizka!)
+   • Industrija je bolj "fluktacijska liga" kot "stalna elita"
+
+3. 📊 ZGODOVINA POMEMBNA, A NE ABSOLUTNA:
+   • 4.3x prednost je pomembna, a ne ogromna
+   • Model napoveduje uspeh z 85% natančnostjo, ne 100%
+   • Prostor za preboj novih ostaja
+
+4. 🎲 EKSTREMNA NESTABILNOST:
+   • 84% izvajalcev ne obdrži pozicije 1+ leto
+   • To kaže na kombinacijo dejavnikov: spremembe okusa, algoritmične spremembe, 
+     naključnost, konkurenca
+
+⚠️ OMEJITVE RAZISKAVE
+-----------------------
+
+1. PODATKOVNE OMEJITVE:
+   • Popularity je trenutna metrika (ne zgodovinska)
+   • Survivorship bias (izginjene skladbe niso zajete)
+   • Selekcijska pristranskost (Kaggle dataset)
+   • Algoritem popularity ni javno dokumentiran
+
+2. METODOLOŠKE OMEJITVE:
+   • Survival analiza krši predpostavko non-informative censoring
+   • Ne moremo ločiti organskega poslušanja od algoritmičnega potiska
+   • Časovna korelacija ni popolnoma upoštevana (potreben time-series model)
+   • Manjkajo zunanji dejavniki (marketing budgets, social media, itd.)
+
+3. INTERPRETACIJSKE OMEJITVE:
+   • Rezultati veljajo za Spotify, ne nujno za celotno glasbeno industrijo
+   • Obdobje 1990-2021 vključuje veliko strukturnih sprememb (pre-streaming vs post)
+   • Ne moremo sklepati o vzročnosti (correlation ≠ causation)
+
+💡 PRIHODNJE RAZISKAVE
+-----------------------
+
+1. Vključitev Spotify API za real-time podatke
+2. Analiza specifičnih žanrov (različni žanri → različni vzorci?)
+3. Vključitev socialnih medijev (Instagram, TikTok followers)
+4. Cox regression za multivariantno survival analizo
+5. Network analiza (kolaboracije, featured artists)
+6. Sentimentna analiza besedil (Ali sentiment vpliva na uspeh?)
+
+================================================================================
+                        ZAKLJUČNA MISEL
+================================================================================
+
+🎤 "V zaključku bi rad poudaril:
+
+Spotify predstavlja KOMPLEKSEN EKOSISTEM, kjer:
+   • Tehnologija ZNIŽUJE vstopne ovire
+   • A algoritmično priporočanje in omrežni efekti OHRANJAJO prednost obstoječih
+   • Rezultat je VISOKO DINAMIČNO okolje z relativno odprtim dostopom, 
+     a ohranjeno prednostjo za že uspešne
+
+To ni črno-belo – ni niti čisti demokratizator niti čisti monopolist.
+Je nekje vmes, in TOČNO TAM je zanimivost sodobne glasbene industrije."
+
+🎯 HVALA ZA POZORNOST. Pripravljen na vprašanja.
+
+================================================================================
+                    POGOSTA VPRAŠANJA - PRIPRAVLJENI ODGOVORI
+================================================================================
+
+Q: Zakaj ste uporabili P90/P50 ratio namesto drugih metrik?
+A: P90/P50 je robusten do outlierjev in dobro meri vrzel med vrhom in 
+   povprečjem. Testiral sem tudi P75/P25 in CV – rezultati so konsistentni.
+
+Q: Kako ste definirali "uspeh"?
+A: Top 25% popularnosti v danem letu. Testiral sem tudi 10% in 50% – 
+   ugotovitve so stabilne (sensitivity analiza).
+
+Q: Ali popularity score odraža dejansko poslušanje?
+A: Spotify pravi, da je weighted kombinacija recent streams + total streams, 
+   a točen algoritem ni javen. To je omejitev, ki jo dokumentiram.
+
+Q: Zakaj je mediana preživetja le 1 leto?
+A: Kombinacija faktorjev: zelo visoka konkurenca, spreminjajoč okus, 
+   algoritmične spremembe, survivorship bias v podatkih.
+
+Q: Ali ste testirali razlike med žanri?
+A: V tej analizi ne – to je naslednji korak. Pričakoval bi večje razlike 
+   (pop vs. classical vs. elektronska).
+
+Q: Kako zanesljive so napovedi modela (85% accuracy)?
+A: ROC AUC 0.920 kaže, da model dobro loči med uspešnimi in neuspešnimi. 
+   A to je still prediction na istih podatkih – v produkciji bi bila 
+   natančnost verjetno nižja.
+
+Q: Kaj je praktična uporaba vaših ugotovitev?
+A: 
+   - Za nove izvajalce: Fokus na dolgoročno gradnjo, ne le en hit
+   - Za platformo: Algoritmi bi lahko bolje podpirali nove izvajalce
+   - Za založbe: Zgodovina izvajalca je močan signal, a ne absolutna garancija
+
+================================================================================
+                        TEHNIČNE PODROBNOSTI (BACKUP)
+================================================================================
+
+📊 STATISTIČNI TESTI UPORABLJENI:
+
+1. Mann-Kendall Trend Test:
+   • Non-parametričen test za monoton trend
+   • Uporabljen za: barrier-to-entry in concentration trende
+   • Kendall's tau: mera moči trenda (-1 do +1)
+
+2. t-test (one-sample):
+   • Test za primerjavo povprečja z znanim pričakovanjem
+   • Uporabljen za: Entry Success Rate vs. 10%
+
+3. ANOVA (Analysis of Variance):
+   • Test za primerjavo več skupin
+   • Uporabljen za: Success rate across experience levels
+
+4. Kaplan-Meier Estimator:
+   • Non-parametrična metoda za survival analizo
+   • Omogoča delo s cenzuriranimi podatki
+
+5. Log-rank Test:
+   • Primerjava survival krivulj med kohortami
+   • Multivariatna različica za več kot 2 skupini
+
+6. Chi-square Test:
+   • Test neodvisnosti v transition matrices
+   • Uporabljen za: retention analiza
+
+📊 TEHNOLOGIJE:
+
+• Python 3.14.2
+• pandas 2.3.3: Data manipulation
+• numpy: Numerical computing
+• matplotlib & seaborn: Static visualizations
+• plotly: Interactive visualizations
+• scikit-learn: Machine learning (PCA, KMeans, LogisticRegression)
+• lifelines: Survival analysis (KaplanMeierFitter)
+• scipy.stats: Statistical tests
+
+📁 OUTPUT DATOTEKE:
+
+Vizualizacije (15+ PNG/HTML):
+   ✓ viz_07_barrier_to_entry.png
+   ✓ viz_08_entry_success.png
+   ✓ viz_10_retention_analysis.png
+   ✓ viz_11_experience_vs_success.png
+   ✓ viz_12_concentration_lorenz.png
+   ✓ viz_13_hypothesis_summary.png
+   ✓ survival_km_overall.png
+   ✓ survival_km_cohorts.png
+   ✓ pca_artist_clustering.png
+   ✓ artist_profiles_radar.png
+   ✓ interactive_dashboard.html
+   ✓ model_roc_curve.png
+   ✓ model_feature_importance.png
+   ✓ whatif_scenarios.png
+   ✓ sensitivity_analysis.png
+   ✓ sankey_artist_transitions.html
+
+================================================================================
+                            KONEC SCRIPTA
+================================================================================
+
+💡 TIP: Vadite predstavitev z glasnim branjem tega scripta!
+💡 TIP: Prilagodite dolžino glede na časovne omejitve.
+💡 TIP: Pripravite si grafove v vrstnem redu za hitro preklapljanje.
+
+🎯 SPOMNITE SE: Jasen, strukturiran nastop + vizualizacije + statistična 
+   podkrepitev = odličen vtis!
